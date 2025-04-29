@@ -26,7 +26,10 @@ const Page = () => {
 
 
     return (
-        <ul>
+      <>
+      {
+        loading ? <div>...loading</div> : (
+            <ul>
             {data.map(cart => (
                 <Link key={cart.id} href={`/users/${cart.userId}/carts/${cart.id}`}>
                     <li className='mb-10'>
@@ -37,6 +40,9 @@ const Page = () => {
                 </Link>
             ))}
         </ul>
+        )
+      }
+      </>
     )
 }
 
