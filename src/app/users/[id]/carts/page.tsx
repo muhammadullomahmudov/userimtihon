@@ -1,52 +1,43 @@
 "use client"
 import { cartType } from '@/interfaces/page'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-const page = () => {
-    const { id } = useParams()
+const Page = () => {
     const [loading, setLoading] = useState(false)
-    const [data, setData] = useState<cartType>()
+    const [data, setData] = useState<cartType[]>([])
+
     useEffect(() => {
         async function getCartData() {
-
+            setLoading(true)
             try {
                 const res = await fetch("https://fakestoreapi.com/carts")
-                const getData = res.json()
-                setData(await getData)
-                setLoading(true)
-            }
-            catch (err: any) {
-
-                if (!err.ok) throw new Error("Failed to fetch")
-            }
-            finally {
+                if (!res.ok) throw new Error("Failed to fetch")
+                const getData = await res.json()
+                setData(getData)
+            } catch (err) {
+                console.error(err)
+            } finally {
                 setLoading(false)
             }
         }
         getCartData()
-
     }, [])
-    console.log(data);
+
 
     return (
-        <>
-
-
-            <ul>
-                <Link href={`users/${id}/carts/${id}`}>
-                    <li>
-                        <p>{data?.id}</p>
-
+        <ul>
+            {data.map(cart => (
+                <Link key={cart.id} href={`/users/${cart.userId}/carts/${cart.id}`}>
+                    <li className='mb-10'>
+                        <p>{cart.id}</p>
+                        <p> {cart.userId}</p>
+                        <p> {cart.date}</p>
                     </li>
                 </Link>
-            </ul>
-
-
-
-        </>
+            ))}
+        </ul>
     )
 }
 
-export default page
+export default Page

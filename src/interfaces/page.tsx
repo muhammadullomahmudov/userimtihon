@@ -8,8 +8,12 @@ export interface useType{
         lastname: string,
       }
 } 
-export interface cartType{
-    id: number,
-    userId: number,
-    date: string,
+export interface cartType {
+  id: number
+  userId: number
+  date: string
+  products: {
+    productId: number
+    quantity: number
+  }[]
 }
